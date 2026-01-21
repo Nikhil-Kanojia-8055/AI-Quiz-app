@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Quiz App with Dashboard & Graph</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="start-screen" class="screen">
+            <div class="dashboard">
+                <div class="icon">🎓</div>
+                <h1>AI Quiz Dashboard</h1>
+                <p>Welcome! Test your knowledge with adaptive questions and stunning visuals.</p>
+                <button id="start-btn">Start Quiz</button>
+            </div>
+        </div>
+        <div id="quiz-screen" class="screen hidden">
+            <div id="score-display">Score: 0/0</div>
+            <div id="progress-bar">
+                <div id="progress-fill"></div>
+            </div>
+            <div id="question-container">
+                <h2 id="question"></h2>
+                <div id="options">
+                    <button class="option" data-index="0"></button>
+                    <button class="option" data-index="1"></button>
+                    <button class="option" data-index="2"></button>
+                    <button class="option" data-index="3"></button>
+                </div>
+            </div>
+            <div id="feedback" class="hidden"></div>
+        </div>
+        <div id="end-screen" class="screen hidden">
+            <h1>Quiz Complete!</h1>
+            <p id="final-score"></p>
+            <div id="graph-container">
+                <canvas id="resultChart"></canvas>
+            </div>
+            <button id="restart-btn">Restart Quiz</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
