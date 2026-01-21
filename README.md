@@ -14,14 +14,14 @@ An interactive, AI-inspired quiz application built with HTML, CSS, and JavaScrip
 
 ## Screenshots
 
-![Start Screen](screenshots/start.png) <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/97e70eae-1429-489d-9d6c-2dfdf018abd4" />
+![Start Screen](screenshots/start.png) 
 
   
-![Quiz Screen](screenshots/quiz.png) <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/851a4a95-418e-4d2f-8864-4f86e89b83f9" />
+![Quiz Screen](screenshots/quiz.png)
 
 
  
-![End Screen](screenshots/end.png)  <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/2d3c8b43-8413-4ae2-aa3f-1f888802256b" />
+![End Screen](screenshots/end.png)  
 
 
 (Add actual screenshots to a `screenshots/` folder)
@@ -30,4 +30,4 @@ An interactive, AI-inspired quiz application built with HTML, CSS, and JavaScrip
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/ai-quiz-app.git
+   git clone https://github.com/Nikhil-Kanojia-8055/ai-quiz-app.git
