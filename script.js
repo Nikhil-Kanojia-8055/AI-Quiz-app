@@ -1,146 +1,122 @@
-const questions = [
-    { question: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris", "Rome"], answer: 2 },
-    { question: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter", "Venus"], answer: 1 },
-    { question: "What is 2 + 2?", options: ["3", "4", "5", "6"], answer: 1 },
-    { question: "Who wrote 'Romeo and Juliet'?", options: ["Shakespeare", "Dickens", "Austen", "Hemingway"], answer: 0 },
-    { question: "What is the largest ocean?", options: ["Atlantic", "Indian", "Arctic", "Pacific"], answer: 3 },
-    { question: "What is the chemical symbol for water?", options: ["H2O", "CO2", "O2", "NaCl"], answer: 0 },
-    { question: "Which animal is known as the 'King of the Jungle'?", options: ["Tiger", "Lion", "Elephant", "Giraffe"], answer: 1 },
-    { question: "What year did World War II end?", options: ["1944", "1945", "1946", "1947"], answer: 1 },
-    { question: "Which programming language is known for web development?", options: ["Python", "JavaScript", "C++", "Java"], answer: 1 },
-    { question: "What is the square root of 16?", options: ["2", "4", "6", "8"], answer: 1 },
-    { question: "Who painted the Mona Lisa?", options: ["Van Gogh", "Picasso", "Da Vinci", "Michelangelo"], answer: 2 },
-    { question: "What is the hardest natural substance on Earth?", options: ["Gold", "Iron", "Diamond", "Platinum"], answer: 2 },
-    { question: "Which country has the most natural lakes?", options: ["Canada", "Russia", "Finland", "USA"], answer: 0 },
-    { question: "What is the currency of Japan?", options: ["Won", "Yen", "Ringgit", "Baht"], answer: 1 },
-    { question: "Who discovered penicillin?", options: ["Fleming", "Pasteur", "Darwin", "Einstein"], answer: 0 }
+const questions=[
+{q:"Capital of India?",o:["Delhi","Mumbai","Chennai","Kolkata"],a:0},
+{q:"HTML stands for?",o:["Hyper Text Markup Language","High Text","Tool","None"],a:0},
+{q:"CSS is used for?",o:["Logic","Styling","DB","Server"],a:1},
+{q:"JS is?",o:["Markup","Styling","Programming","DB"],a:2},
+{q:"Largest planet?",o:["Earth","Mars","Jupiter","Venus"],a:2},
+{q:"2+2?",o:["3","4","5","6"],a:1},
+{q:"Founder of Microsoft?",o:["Jobs","Gates","Musk","Zuck"],a:1},
+{q:"Python is?",o:["Snake","Language","OS","Game"],a:1},
+{q:"RAM full form?",o:["Random Access Memory","Read Only","Run App","None"],a:0},
+{q:"HTTP is?",o:["Protocol","Lang","OS","Browser"],a:0},
+{q:"CPU is?",o:["Brain","Storage","Input","Output"],a:0},
+{q:"Git is?",o:["IDE","Version Control","OS","Compiler"],a:1},
+{q:"Linux is?",o:["Browser","OS","Lang","Game"],a:1},
+{q:"AI means?",o:["Artificial Intelligence","Auto Info","Net","None"],a:0},
+{q:"RGB used for?",o:["Sound","Color","AI","Net"],a:1},
+{q:"SQL used for?",o:["Design","Database","Game","OS"],a:1},
+{q:"WWW inventor?",o:["Jobs","Berners-Lee","Gates","Tesla"],a:1},
+{q:"Chrome is?",o:["OS","Browser","Server","IDE"],a:1},
+{q:"Binary base?",o:["2","8","10","16"],a:0},
+{q:"Bootstrap is?",o:["Framework","Lang","OS","DB"],a:0}
 ];
 
-let currentQuestionIndex = 0;
-let score = 0;
-let results = []; // Track correct/incorrect per question
+let i=0,score=0,results=[],timer, timeLeft=15;
 
-const startScreen = document.getElementById('start-screen');
-const quizScreen = document.getElementById('quiz-screen');
-const endScreen = document.getElementById('end-screen');
-const questionEl = document.getElementById('question');
-const optionsEl = document.getElementById('options');
-const feedbackEl = document.getElementById('feedback');
-const progressFill = document.getElementById('progress-fill');
-const scoreDisplay = document.getElementById('score-display');
-const finalScoreEl = document.getElementById('final-score');
+const qEl=document.getElementById("question");
+const opts=document.querySelectorAll(".option");
+const progress=document.getElementById("progress");
+const scoreEl=document.getElementById("score");
+const timerEl=document.getElementById("timer");
 
-document.getElementById('start-btn').addEventListener('click', startQuiz);
-document.getElementById('restart-btn').addEventListener('click', restartQuiz);
+const correctSound=new Audio("sounds/correct.mp3");
+const wrongSound=new Audio("sounds/wrong.mp3");
+const tickSound=new Audio("sounds/tick.mp3");
 
-function startQuiz() {
-    startScreen.classList.add('hidden');
-    quizScreen.classList.remove('hidden');
-    loadQuestion();
+function startQuiz(){
+start.classList.add("d-none");
+quiz.classList.remove("d-none");
+load();
 }
 
-function loadQuestion() {
-    const currentQuestion = questions[currentQuestionIndex];
-    questionEl.textContent = currentQuestion.question;
-    const options = document.querySelectorAll('.option');
-    options.forEach((option, index) => {
-        option.textContent = currentQuestion.options[index];
-        option.classList.remove('correct', 'incorrect');
-        option.disabled = false;
-        option.addEventListener('click', () => checkAnswer(index));
-    });
-    feedbackEl.classList.add('hidden');
-    updateProgress();
-    updateScoreDisplay();
+function load(){
+clearInterval(timer);
+timeLeft=15;
+timerEl.innerText=`⏱ ${timeLeft}s`;
+timer=setInterval(countdown,1000);
+
+let q=questions[i];
+qEl.innerText=q.q;
+opts.forEach((b,idx)=>{
+b.innerText=q.o[idx];
+b.className="btn option";
+b.disabled=false;
+});
+progress.style.width=((i+1)/questions.length)*100+"%";
+scoreEl.innerText=`Score: ${score}/${i}`;
 }
 
-function checkAnswer(selectedIndex) {
-    const currentQuestion = questions[currentQuestionIndex];
-    const options = document.querySelectorAll('.option');
-    options.forEach(option => option.disabled = true);
-
-    const isCorrect = selectedIndex === currentQuestion.answer;
-    results.push(isCorrect ? 1 : 0); // 1 for correct, 0 for incorrect
-
-    if (isCorrect) {
-        options[selectedIndex].classList.add('correct');
-        feedbackEl.textContent = "Correct! AI thinks you're smart.";
-        feedbackEl.classList.add('correct-feedback');
-        score++;
-        createConfetti();
-    } else {
-        options[selectedIndex].classList.add('incorrect');
-        options[currentQuestion.answer].classList.add('correct');
-        feedbackEl.textContent = "Incorrect. AI suggests studying more!";
-        feedbackEl.classList.add('incorrect-feedback');
-    }
-
-    feedbackEl.classList.remove('hidden');
-    updateScoreDisplay();
-    setTimeout(() => {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            loadQuestion();
-        } else {
-            showEndScreen();
-        }
-    }, 2000);
+function countdown(){
+timeLeft--;
+tickSound.play();
+timerEl.innerText=`⏱ ${timeLeft}s`;
+if(timeLeft===0){
+clearInterval(timer);
+answer(-1);
+}
 }
 
-function updateProgress() {
-    const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-    progressFill.style.width = progress + '%';
+function answer(x){
+clearInterval(timer);
+opts.forEach(b=>b.disabled=true);
+let correct=x===questions[i].a;
+results.push(correct?1:0);
+
+if(correct){
+opts[x].classList.add("correct");
+score++;
+correctSound.play();
+confetti();
+}else{
+if(x>=0) opts[x].classList.add("wrong");
+opts[questions[i].a].classList.add("correct");
+wrongSound.play();
 }
 
-function updateScoreDisplay() {
-    scoreDisplay.textContent = `Score: ${score}/${currentQuestionIndex + 1}`;
+setTimeout(()=>{
+i++;
+i<questions.length?load():showResult();
+},1000);
 }
 
-function createConfetti() {
-    for (let i = 0; i = 50; i++) {
-        const confetti = document.createElement('div');
-        confetti.classList.add('confetti');
-        confetti.style.left = Math.random() * 100 + '%';
-        confetti.style.animationDelay = Math.random() * 2 + 's';
-        document.body.appendChild(confetti);
-        setTimeout(() => confetti.remove(), 3000);
-    }
+function confetti(){
+for(let j=0;j<25;j++){
+let c=document.createElement("div");
+c.className="confetti";
+c.style.left=Math.random()*100+"%";
+c.style.background=`hsl(${Math.random()*360},100%,50%)`;
+document.body.appendChild(c);
+setTimeout(()=>c.remove(),3000);
+}
 }
 
-function showEndScreen() {
-    quizScreen.classList.add('hidden');
-    endScreen.classList.remove('hidden');
-    finalScoreEl.textContent = `Your final score: ${score}/${questions.length}. AI rates you: ${score > questions.length / 2 ? 'Genius!' : 'Keep trying!'}`;
-    renderGraph();
-}
+function showResult(){
+quiz.classList.add("d-none");
+result.classList.remove("d-none");
+final.innerText=`Final Score: ${score}/${questions.length}`;
 
-function renderGraph() {
-    const ctx = document.getElementById('resultChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: questions.map((_, i) => `Q${i + 1}`),
-            datasets: [{
-                label: 'Performance (1=Correct, 0=Incorrect)',
-                data: results,
-                backgroundColor: results.map(r => r ? '#4ecdc4' : '#ff6b6b'),
-                borderColor: '#333',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: { beginAtZero: true, max: 1 }
-            }
-        }
-    });
+new Chart(chart,{
+type:"bar",
+data:{
+labels:results.map((_,i)=>"Q"+(i+1)),
+datasets:[{
+data:results,
+backgroundColor:results.map(r=>r?"#00ff9d":"#ff4d4d")
+}]
+},
+options:{
+scales:{y:{min:0,max:1,ticks:{stepSize:1}}},
+plugins:{legend:{display:false}}
 }
-
-function restartQuiz() {
-    currentQuestionIndex = 0;
-    score = 0;
-    results = [];
-    endScreen.classList.add('hidden');
-    startScreen.classList.remove('hidden');
+});
 }
